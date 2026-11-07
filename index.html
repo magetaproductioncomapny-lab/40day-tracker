@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>40-Day 1K Subscriber Music Accelerator</title>
+    <meta name="description" content="A 40-day music creator launch plan with daily tasks, subscriber tracking, and saved progress.">
+    <meta name="theme-color" content="#0A0E17">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        studio: {
+                            base: '#0A0E17',
+                            card: '#131A26',
+                            border: '#232E42',
+                            accent: '#00F0FF',
+                            purple: '#A855F7',
+                            pink: '#EC4899',
+                            amber: '#F59E0B',
+                            emerald: '#10B981'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #0A0E17;
+            color: #E2E8F0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0E17;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #232E42;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #A855F7;
+        }
+        .glow-accent {
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+        }
+        .glow-purple {
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
+        }
+        .glow-emerald {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-16">
+
+    <!-- TOP HEADER / NAVBAR -->
+    <header class="border-b border-studio-border bg-studio-card/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-studio-accent via-studio-purple to-studio-pink flex items-center justify-center text-slate-950 font-black text-xl shadow-lg">
+                    <i class="fa-solid fa-guitar"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-base sm:text-lg leading-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">40-DAY MUSIC LAUNCHPAD</h1>
+                    <p class="text-xs text-cyan-400 font-mono flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> 3 TASKS / DAY STRATEGY
+                    </p>
+                </div>
+            </div>
+
+            <!-- Global Action Buttons -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <button onclick="exportData()" title="Backup Data" class="px-3 py-1.5 rounded-xl bg-studio-border/60 hover:bg-studio-border text-xs font-semibold flex items-center gap-1.5 transition text-slate-200">
+                    <i class="fa-solid fa-download text-cyan-400"></i> <span class="hidden sm:inline">Backup</span>
+                </button>
+                <button onclick="confirmReset()" title="Reset All" class="px-3 py-1.5 rounded-xl bg-rose-950/40 border border-rose-800/40 text-rose-400 hover:bg-rose-900/40 text-xs font-semibold flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-rotate-left"></i> <span class="hidden sm:inline">Reset</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 flex-grow w-full space-y-6">
+
+        <!-- DASHBOARD STATS HERO GRID -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- Subscriber Goal Card -->
+            <div class="bg-studio-card border border-studio-border rounded-2xl p-5 relative overflow-hidden glow-accent flex flex-col justify-between">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Subscribers Target</p>
+                        <div class="flex items-baseline space-x-2 mt-1">
+                            <input type="number" id="sub-input" min="0" max="10000" onchange="updateSubsCount(this.value)"
+                                class="text-2xl font-black text-white bg-slate-900 border border-studio-border rounded-lg px-2 py-0.5 w-24 focus:outline-none focus:border-cyan-400">
+                            <span class="text-xs font-bold text-slate-400">/ 1,000</span>
+                        </div>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-lg">
+                        <i class="fa-brands fa-youtube"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between text-xs text-slate-400 mb-1 font-mono">
+                        <span>Goal Progress</span>
+                        <span id="sub-percentage" class="text-cyan-400 font-bold">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-800">
+                        <div id="sub-progress-bar" class="bg-gradient-to-r from-cyan-400 to-blue-500 h-full w-0 transition-all duration-500"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Days Completed Card -->
+            <div class="bg-studio-card border border-studio-border rounded-2xl p-5 relative overflow-hidden glow-purple flex flex-col justify-between">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Timeline</p>
+                        <h2 id="days-completed-text" class="text-2xl font-black text-white mt-1">0 <span class="text-xs font-normal text-slate-400">/ 40 Days</span></h2>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between text-xs text-slate-400 mb-1 font-mono">
+                        <span>Days Finished</span>
+                        <span id="days-percentage" class="text-purple-400 font-bold">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-800">
+                        <div id="days-progress-bar" class="bg-gradient-to-r from-purple-500 to-pink-500 h-full w-0 transition-all duration-500"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Micro-Tasks Progress Card -->
+            <div class="bg-studio-card border border-studio-border rounded-2xl p-5 flex flex-col justify-between">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tasks Done</p>
+                        <h2 id="tasks-completed-text" class="text-2xl font-black text-white mt-1">0 <span class="text-xs font-normal text-slate-400">/ 120 Tasks</span></h2>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex justify-between text-xs text-slate-400 mb-1 font-mono">
+                        <span>Checklist Completion</span>
+                        <span id="tasks-percentage" class="text-amber-400 font-bold">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-800">
+                        <div id="tasks-progress-bar" class="bg-gradient-to-r from-amber-400 to-orange-500 h-full w-0 transition-all duration-500"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Songs Tracked Status Card -->
+            <div class="bg-studio-card border border-studio-border rounded-2xl p-5 flex flex-col justify-between">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Song Pipeline</p>
+                        <h2 id="songs-released-text" class="text-2xl font-black text-white mt-1">0 / 5 Released</h2>
+                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-compact-disc"></i>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center justify-between text-xs font-mono">
+                    <span class="text-slate-400">Next Release:</span>
+                    <span id="next-release-tag" class="text-emerald-400 font-bold">Day 7 (Song 1)</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FILTER TABS NAV BAR -->
+        <div class="bg-studio-card border border-studio-border rounded-2xl p-2 flex flex-wrap gap-2 items-center justify-between">
+            <div class="flex flex-wrap gap-1.5 text-xs font-semibold w-full md:w-auto" id="filter-tabs">
+                <button onclick="setFilter('all')" id="btn-filter-all" class="px-3.5 py-2 rounded-xl transition bg-cyan-500 text-slate-950 font-bold">All 40 Days</button>
+                <button onclick="setFilter('phase1')" id="btn-filter-phase1" class="px-3.5 py-2 rounded-xl transition text-slate-400 hover:text-white hover:bg-slate-800">Phase 1 (Days 1-7)</button>
+                <button onclick="setFilter('phase2')" id="btn-filter-phase2" class="px-3.5 py-2 rounded-xl transition text-slate-400 hover:text-white hover:bg-slate-800">Phase 2 (Days 8-20)</button>
+                <button onclick="setFilter('phase3')" id="btn-filter-phase3" class="px-3.5 py-2 rounded-xl transition text-slate-400 hover:text-white hover:bg-slate-800">Phase 3 (Days 21-40)</button>
+                <button onclick="setFilter('release')" id="btn-filter-release" class="px-3.5 py-2 rounded-xl transition text-emerald-400 border border-emerald-500/30 bg-emerald-950/30 hover:bg-emerald-900/50">
+                    <i class="fa-solid fa-star mr-1"></i> Release Days Only
+                </button>
+            </div>
+            
+            <div class="flex items-center space-x-2 mt-2 md:mt-0 ml-auto text-xs">
+                <button onclick="toggleAllExpand(true)" class="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-studio-border text-slate-300 hover:text-white">Expand All</button>
+                <button onclick="toggleAllExpand(false)" class="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-studio-border text-slate-300 hover:text-white">Collapse All</button>
+            </div>
+        </div>
+
+        <!-- MAIN LAYOUT GRID (Checklist + Sticky Notes) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- 40-DAY CHECKLIST CARDS (2 Columns on large screens) -->
+            <div class="lg:col-span-2 space-y-4" id="days-checklist-container">
+                <!-- Dynamically populated by JS -->
+            </div>
+
+            <!-- SIDEBAR: STICKY NOTES & STUDIO LOG -->
+            <div class="space-y-6">
+                
+                <!-- Daily Studio Sticky Note -->
+                <div class="bg-studio-card border border-studio-border rounded-2xl p-5 space-y-3 relative">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-bold text-sm text-white flex items-center gap-2">
+                            <i class="fa-solid fa-note-sticky text-amber-400"></i> Studio Notepad & Ideas
+                        </h3>
+                        <span class="text-[10px] text-slate-500 font-mono">Auto-saved</span>
+                    </div>
+                    <textarea id="studio-notes" oninput="saveNotes(this.value)" rows="8" placeholder="Log your guitar chord ideas, favorite camera angles, caption ideas, or preset names here..."
+                        class="w-full bg-slate-950/80 border border-studio-border rounded-xl p-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-amber-400 leading-relaxed font-mono resize-none"></textarea>
+                </div>
+
+                <!-- Strategic Reminders Box -->
+                <div class="bg-studio-card border border-studio-border rounded-2xl p-5 space-y-3">
+                    <h3 class="font-bold text-sm text-white flex items-center gap-2">
+                        <i class="fa-solid fa-fire text-rose-400"></i> The Golden Creator Rules
+                    </h3>
+                    <ul class="text-xs text-slate-300 space-y-2.5 font-mono">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-check text-cyan-400 mt-0.5"></i>
+                            <span><strong>No burn-out sleep cuts:</strong> Spend 2 hours batch-recording on Sundays instead.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-check text-purple-400 mt-0.5"></i>
+                            <span><strong>Visual Hook in 3s:</strong> Show your hands on the guitar fretboard or MIDI keys immediately.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-check text-amber-400 mt-0.5"></i>
+                            <span><strong>100% Comment Reply:</strong> Turn casual viewers into loyal subscribers in your first hour.</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- CONFIRMATION RESET MODAL -->
+    <div id="reset-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-studio-card border border-studio-border rounded-2xl p-6 max-w-md w-full space-y-4 text-center">
+            <div class="w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl mx-auto">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white">Reset All Progress?</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">This will erase all checked tasks, subscriber logs, and studio notes. Are you sure you want to start fresh?</p>
+            <div class="flex gap-3 pt-2">
+                <button onclick="closeResetModal()" class="w-1/2 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold hover:bg-slate-700">Cancel</button>
+                <button onclick="executeReset()" class="w-1/2 py-2 rounded-xl bg-rose-600 text-white text-xs font-semibold hover:bg-rose-500">Yes, Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APP ENGINE -->
+    <script>
+        // EXACT 40-DAY DATA STRUCTURE (3 TASKS PER DAY WITH SONG LIFECYCLES)
+        const MASTER_40_DAY_PLAN = [
+            // PHASE 1: SETUP & SONG 1
+            { day: 1, phase: 1, song: "Song 1", isRelease: false, title: "Channel Setup & Pick Song 1", tasks: ["Update YouTube profile picture, banner, and bio.", "Choose Song 1 to produce (Popular cover or strong original).", "Batch write 5 Short video hook ideas."] },
+            { day: 2, phase: 1, song: "Song 1", isRelease: false, title: "MIDI & Drums (Song 1)", tasks: ["Record MIDI drums, bass, and synth keys for Song 1.", "Record a 30-second video of your MIDI drum session.", "Edit and upload Short 1 ('Building a beat from scratch')."] },
+            { day: 3, phase: 1, song: "Song 1", isRelease: false, title: "Guitar Tracking (Song 1)", tasks: ["Record rhythm and lead acoustic guitar tracks for Song 1.", "Film close-up of your hands on the guitar fretboard.", "Edit and upload Short 2 ('Guitar layer over this beat')."] },
+            { day: 4, phase: 1, song: "Song 1", isRelease: false, title: "Vocals / Lead Polish (Song 1)", tasks: ["Record lead vocals or final guitar lead melody for Song 1.", "Edit a quick 15-second teaser clip of the track.", "Upload Short 3 (Song Teaser: 'Releasing this full track soon')."] },
+            { day: 5, phase: 1, song: "Song 1", isRelease: false, title: "Mix & Video Shoot (Song 1)", tasks: ["Mix and master Song 1 audio in your DAW.", "Shoot full performance video on your iPhone in studio.", "Upload Short 4 (Quick tutorial: 'How I played this chord progression')."] },
+            { day: 6, phase: 1, song: "Song 1", isRelease: false, title: "Final Video Edit & Upload Prep", tasks: ["Edit the full performance video for Song 1 on CapCut/phone.", "Create a high-contrast thumbnail using your iPhone.", "Schedule Song 1 (Full Video) to premiere tomorrow."] },
+            { day: 7, phase: 1, song: "Song 1", isRelease: true, title: "⭐ RELEASE DAY: SONG 1", tasks: ["Publish Song 1 (Full Video on YouTube).", "Post a Short sending viewers directly to the full video.", "Reply to every comment on the video within the first 2 hours."] },
+
+            // PHASE 2: SONG 2 & SONG 3
+            { day: 8, phase: 2, song: "Song 2", isRelease: false, title: "Pick Song 2 & Arrangement", tasks: ["Pick Song 2 and lay down basic tempo and click track.", "Upload Short 5 (Behind the scenes: 'Why I picked this song').", "Reply to all new channel comments."] },
+            { day: 9, phase: 2, song: "Song 2", isRelease: false, title: "MIDI & Synth (Song 2)", tasks: ["Record MIDI keyboard layers and synth pads for Song 2.", "Upload Short 6 (MIDI beat breakdown).", "Reply to channel comments."] },
+            { day: 10, phase: 2, song: "Song 2", isRelease: false, title: "Guitar Tracking (Song 2)", tasks: ["Record acoustic & electric guitar layers for Song 2.", "Upload Short 7 (Raw guitar vs full beat comparison).", "Reply to channel comments."] },
+            { day: 11, phase: 2, song: "Song 2", isRelease: false, title: "Mix & Master (Song 2)", tasks: ["Complete audio mix for Song 2.", "Record studio performance video on iPhone.", "Upload Short 8 (A vs B test: 'Which melody works better?')."] },
+            { day: 12, phase: 2, song: "Song 2", isRelease: false, title: "Edit & Schedule Premiere", tasks: ["Edit Song 2 full-length video.", "Upload Short 9 (30-second snippet of Song 2).", "Schedule Song 2 premiere for tomorrow."] },
+            { day: 13, phase: 2, song: "Song 2", isRelease: true, title: "⭐ RELEASE DAY: SONG 2", tasks: ["Publish Song 2 (Full Video).", "Post a Short directing people to the full video.", "Reply to all comments in the first hour."] },
+            { day: 14, phase: 2, song: "Song 2", isRelease: false, title: "Batching & Content Check", tasks: ["Plan song arrangement ideas for Phase 3.", "Batch edit 3 short clips from existing studio footage.", "Upload Short 10."] },
+            { day: 15, phase: 2, song: "Song 3", isRelease: false, title: "Song 3 Pre-Production", tasks: ["Lay down chord progressions and drums for Song 3.", "Upload Short 11 (Quick guitar lick tutorial).", "Reply to channel comments."] },
+            { day: 16, phase: 2, song: "Song 3", isRelease: false, title: "MIDI & Guitar Tracking (Song 3)", tasks: ["Record MIDI keyboard & guitar layers for Song 3.", "Upload Short 12 (Studio vlog clip).", "Reply to channel comments."] },
+            { day: 17, phase: 2, song: "Song 3", isRelease: false, title: "Mixing & Video Shoot (Song 3)", tasks: ["Mix Song 3 audio.", "Shoot full performance video on iPhone.", "Upload Short 13 (Production trick clip)."] },
+            { day: 18, phase: 2, song: "Song 3", isRelease: false, title: "Video Edit & Thumbnail", tasks: ["Edit Song 3 performance video.", "Design custom thumbnail on phone.", "Upload Short 14 (Song 3 countdown teaser)."] },
+            { day: 19, phase: 2, song: "Song 3", isRelease: true, title: "⭐ RELEASE DAY: SONG 3", tasks: ["Publish Song 3 (Full Video).", "Post Short directing viewers to the new release.", "Reply to all comments."] },
+            { day: 20, phase: 2, song: "Song 3", isRelease: false, title: "Analytics & Style Audit", tasks: ["Check YouTube Analytics for your top 3 most viewed Shorts.", "Upload Short 15 (Remix/re-edit of your #1 top Short).", "Note down which content style brought the most subscribers."] },
+
+            // PHASE 3: SPRINT & SONGS 4-5
+            { day: 21, phase: 3, song: "Song 4", isRelease: false, title: "Pick Song 4 & MIDI Foundation", tasks: ["Lay down MIDI foundation for Song 4 (using winning style).", "Upload Short 16.", "Reply to channel comments."] },
+            { day: 22, phase: 3, song: "Song 4", isRelease: false, title: "Guitar Tracking (Song 4)", tasks: ["Record lead & rhythm guitars for Song 4.", "Upload Short 17.", "Reply to channel comments."] },
+            { day: 23, phase: 3, song: "Song 4", isRelease: false, title: "Mix & Video Shoot (Song 4)", tasks: ["Mix Song 4 and shoot iPhone performance video.", "Upload Short 18.", "Reply to channel comments."] },
+            { day: 24, phase: 3, song: "Song 4", isRelease: false, title: "Edit & Schedule Premiere", tasks: ["Edit Song 4 video.", "Upload Short 19.", "Schedule Song 4 premiere for tomorrow."] },
+            { day: 25, phase: 3, song: "Song 4", isRelease: true, title: "⭐ RELEASE DAY: SONG 4", tasks: ["Publish Song 4 (Full Video).", "Post Short highlighting Song 4.", "Reply to all comments."] },
+            { day: 26, phase: 3, song: "Sprint", isRelease: false, title: "Shorts Sprint - Day 1", tasks: ["Record 1 Short using your #1 top-performing concept.", "Add pinned comment asking viewers to subscribe.", "Spend 20 minutes replying to recent comments."] },
+            { day: 27, phase: 3, song: "Sprint", isRelease: false, title: "Shorts Sprint - Day 2", tasks: ["Record 1 Short focused on MIDI keyboard synth trick.", "Add pinned comment asking viewers to subscribe.", "Reply to channel comments."] },
+            { day: 28, phase: 3, song: "Sprint", isRelease: false, title: "Shorts Sprint - Day 3", tasks: ["Record 1 Short showing guitar chord progression.", "Add pinned comment with channel link.", "Reply to channel comments."] },
+            { day: 29, phase: 3, song: "Sprint", isRelease: false, title: "Shorts Sprint - Day 4", tasks: ["Record 1 Short flipping a viral song into your style.", "Add pinned call-to-action.", "Reply to channel comments."] },
+            { day: 30, phase: 3, song: "Sprint", isRelease: false, title: "Shorts Sprint - Day 5", tasks: ["Record 1 Short (Interactive: 'Rate this beat 1-10').", "Add pinned comment asking viewers to subscribe.", "Reply to channel comments."] },
+            { day: 31, phase: 3, song: "Song 5", isRelease: false, title: "Song 5 Tracking (MIDI & Guitar)", tasks: ["Record all instrumental tracks for Song 5.", "Upload Short 26.", "Reply to channel comments."] },
+            { day: 32, phase: 3, song: "Song 5", isRelease: false, title: "Mix, Shoot & Edit (Song 5)", tasks: ["Mix audio and record/edit video for Song 5.", "Upload Short 27.", "Schedule Premiere for tomorrow."] },
+            { day: 33, phase: 3, song: "Song 5", isRelease: true, title: "⭐ RELEASE DAY: SONG 5", tasks: ["Publish Song 5 (Full Video).", "Post promo Short.", "Reply to all comments."] },
+            { day: 34, phase: 3, song: "Final Sprint", isRelease: false, title: "Final Sprint - Day 1", tasks: ["Upload Short 29 (High energy beat breakdown).", "Post community update or channel poll.", "Reply to all comments."] },
+            { day: 35, phase: 3, song: "Final Sprint", isRelease: false, title: "Final Sprint - Day 2", tasks: ["Upload Short 30 (Quick guitar lesson).", "Pin call-to-action on top 3 performing videos.", "Reply to all comments."] },
+            { day: 36, phase: 3, song: "Final Sprint", isRelease: false, title: "Final Sprint - Day 3", tasks: ["Upload Short 31 (Before vs After production).", "Engage with 10 other music creators' channels.", "Reply to all comments."] },
+            { day: 37, phase: 3, song: "Final Sprint", isRelease: false, title: "Final Sprint - Day 4", tasks: ["Upload Short 32 (Studio gear breakdown: iPhone + Guitar + MIDI).", "Share video links on social media.", "Reply to all comments."] },
+            { day: 38, phase: 3, song: "Final Sprint", isRelease: false, title: "Final Sprint - Day 5", tasks: ["Upload Short 33 (Teaser for tomorrow's recap).", "Review overall channel subscriber count.", "Reply to all comments."] },
+            { day: 39, phase: 3, song: "Final Sprint", isRelease: false, title: "Final Prep & Retrospective", tasks: ["Batch clip top moments from the past 40 days.", "Upload Short 34.", "Pin subscriber calls-to-action across your top videos."] },
+            { day: 40, phase: 3, song: "Milestone", isRelease: true, title: "🏆 MILESTONE CELEBRATION DAY", tasks: ["Publish 40-Day Studio Journey Video or YouTube Live Stream.", "Post Short thanking your new subscriber fan base!", "Celebrate your discipline and 40-day milestone!"] }
+        ];
+
+        // STATE APP STORAGE
+        let appState = {
+            currentSubs: 0,
+            checkedTasks: {}, // key: "d1_t0", value: boolean
+            expandedDays: { 1: true }, // dayNum -> bool
+            notes: "",
+            activeFilter: 'all'
+        };
+
+        // INITIALIZATION
+        window.onload = function() {
+            loadState();
+            setFilter(appState.activeFilter);
+            updateDashboard();
+        };
+
+        function loadState() {
+            const saved = localStorage.getItem('music_launcher_v2');
+            if (saved) {
+                try {
+                    const savedState = JSON.parse(saved);
+                    if (savedState && typeof savedState === 'object' && !Array.isArray(savedState)) {
+                        const validFilters = ['all', 'phase1', 'phase2', 'phase3', 'release'];
+                        appState = {
+                            ...appState,
+                            currentSubs: Number.isFinite(savedState.currentSubs)
+                                ? Math.min(10000, Math.max(0, Math.trunc(savedState.currentSubs)))
+                                : 0,
+                            checkedTasks: savedState.checkedTasks && typeof savedState.checkedTasks === 'object' && !Array.isArray(savedState.checkedTasks)
+                                ? savedState.checkedTasks
+                                : {},
+                            expandedDays: savedState.expandedDays && typeof savedState.expandedDays === 'object' && !Array.isArray(savedState.expandedDays)
+                                ? savedState.expandedDays
+                                : { 1: true },
+                            notes: typeof savedState.notes === 'string' ? savedState.notes : '',
+                            activeFilter: validFilters.includes(savedState.activeFilter) ? savedState.activeFilter : 'all'
+                        };
+                    }
+                } catch(e) {
+                    console.error("Error loading state", e);
+                }
+            }
+            document.getElementById('sub-input').value = appState.currentSubs || 0;
+            document.getElementById('studio-notes').value = appState.notes || "";
+        }
+
+        function saveState() {
+            localStorage.setItem('music_launcher_v2', JSON.stringify(appState));
+            updateDashboard();
+        }
+
+        // RENDER CHECKLIST ENGINE
+        function renderChecklist() {
+            const container = document.getElementById('days-checklist-container');
+            container.innerHTML = '';
+
+            const filter = appState.activeFilter;
+
+            MASTER_40_DAY_PLAN.forEach(item => {
+                // Apply Filters
+                if (filter === 'phase1' && item.phase !== 1) return;
+                if (filter === 'phase2' && item.phase !== 2) return;
+                if (filter === 'phase3' && item.phase !== 3) return;
+                if (filter === 'release' && !item.isRelease) return;
+
+                // Compute task completion status
+                const task0 = appState.checkedTasks[`d${item.day}_t0`] || false;
+                const task1 = appState.checkedTasks[`d${item.day}_t1`] || false;
+                const task2 = appState.checkedTasks[`d${item.day}_t2`] || false;
+
+                const completedCount = (task0 ? 1 : 0) + (task1 ? 1 : 0) + (task2 ? 1 : 0);
+                const isDayComplete = completedCount === 3;
+                const isExpanded = !!appState.expandedDays[item.day];
+
+                // Badges and borders
+                let cardBorder = item.isRelease 
+                    ? 'border-emerald-500/60 bg-emerald-950/10 glow-emerald' 
+                    : (isDayComplete ? 'border-cyan-500/40 bg-cyan-950/10' : 'border-studio-border bg-studio-card');
+
+                const cardHtml = `
+                    <div class="${cardBorder} rounded-2xl border transition duration-200 overflow-hidden">
+                        
+                        <!-- Header Bar -->
+                        <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-800/40 select-none" onclick="toggleExpand(${item.day})">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 rounded-lg ${isDayComplete ? 'bg-cyan-500 text-slate-950 font-black' : 'bg-slate-900 border border-slate-700 text-slate-400 font-bold'} flex items-center justify-center text-xs font-mono">
+                                    ${item.day}
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <h4 class="font-bold text-sm text-white">${item.title}</h4>
+                                        ${item.isRelease ? '<span class="text-[10px] px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 font-extrabold border border-emerald-500/30">RELEASE</span>' : ''}
+                                    </div>
+                                    <p class="text-xs text-slate-400 font-mono">${item.song} • Phase ${item.phase}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xs px-2.5 py-1 rounded-full font-mono font-bold ${isDayComplete ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'bg-slate-900 text-slate-400 border border-slate-800'}">
+                                    ${completedCount}/3 Done
+                                </span>
+                                <i class="fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-slate-500 text-xs"></i>
+                            </div>
+                        </div>
+
+                        <!-- 3 Micro-Tasks Body -->
+                        <div class="${isExpanded ? 'block' : 'hidden'} border-t border-studio-border/50 p-4 bg-slate-950/40 space-y-3">
+                            
+                            <!-- Task 1 -->
+                            <div class="flex items-start space-x-3 p-2.5 rounded-xl hover:bg-slate-900/60 transition cursor-pointer" onclick="toggleTask(${item.day}, 0)">
+                                <input type="checkbox" ${task0 ? 'checked' : ''} 
+                                    onclick="event.stopPropagation(); toggleTask(${item.day}, 0)"
+                                    class="w-5 h-5 mt-0.5 rounded border-slate-700 text-cyan-400 focus:ring-cyan-400 focus:ring-offset-slate-950 bg-slate-900 cursor-pointer">
+                                <div class="text-xs">
+                                    <span class="font-semibold text-cyan-400 font-mono">Task 1 (Production):</span>
+                                    <span class="${task0 ? 'line-through text-slate-500' : 'text-slate-200'} ml-1">${item.tasks[0]}</span>
+                                </div>
+                            </div>
+
+                            <!-- Task 2 -->
+                            <div class="flex items-start space-x-3 p-2.5 rounded-xl hover:bg-slate-900/60 transition cursor-pointer" onclick="toggleTask(${item.day}, 1)">
+                                <input type="checkbox" ${task1 ? 'checked' : ''} 
+                                    onclick="event.stopPropagation(); toggleTask(${item.day}, 1)"
+                                    class="w-5 h-5 mt-0.5 rounded border-slate-700 text-purple-400 focus:ring-purple-400 focus:ring-offset-slate-950 bg-slate-900 cursor-pointer">
+                                <div class="text-xs">
+                                    <span class="font-semibold text-purple-400 font-mono">Task 2 (Shorts/Content):</span>
+                                    <span class="${task1 ? 'line-through text-slate-500' : 'text-slate-200'} ml-1">${item.tasks[1]}</span>
+                                </div>
+                            </div>
+
+                            <!-- Task 3 -->
+                            <div class="flex items-start space-x-3 p-2.5 rounded-xl hover:bg-slate-900/60 transition cursor-pointer" onclick="toggleTask(${item.day}, 2)">
+                                <input type="checkbox" ${task2 ? 'checked' : ''} 
+                                    onclick="event.stopPropagation(); toggleTask(${item.day}, 2)"
+                                    class="w-5 h-5 mt-0.5 rounded border-slate-700 text-amber-400 focus:ring-amber-400 focus:ring-offset-slate-950 bg-slate-900 cursor-pointer">
+                                <div class="text-xs">
+                                    <span class="font-semibold text-amber-400 font-mono">Task 3 (Upload/Engage):</span>
+                                    <span class="${task2 ? 'line-through text-slate-500' : 'text-slate-200'} ml-1">${item.tasks[2]}</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        }
+
+        // TOGGLE HELPERS
+        function toggleTask(day, taskIdx) {
+            const key = `d${day}_t${taskIdx}`;
+            appState.checkedTasks[key] = !appState.checkedTasks[key];
+            saveState();
+            renderChecklist();
+        }
+
+        function toggleExpand(day) {
+            appState.expandedDays[day] = !appState.expandedDays[day];
+            renderChecklist();
+        }
+
+        function toggleAllExpand(expand) {
+            MASTER_40_DAY_PLAN.forEach(item => {
+                appState.expandedDays[item.day] = expand;
+            });
+            renderChecklist();
+        }
+
+        function setFilter(filter) {
+            appState.activeFilter = filter;
+            
+            // Highlight active button
+            ['all', 'phase1', 'phase2', 'phase3', 'release'].forEach(f => {
+                const btn = document.getElementById(`btn-filter-${f}`);
+                if (f === filter) {
+                    btn.className = "px-3.5 py-2 rounded-xl transition bg-cyan-500 text-slate-950 font-bold";
+                } else if (f === 'release') {
+                    btn.className = "px-3.5 py-2 rounded-xl transition text-emerald-400 border border-emerald-500/30 bg-emerald-950/30 hover:bg-emerald-900/50";
+                } else {
+                    btn.className = "px-3.5 py-2 rounded-xl transition text-slate-400 hover:text-white hover:bg-slate-800";
+                }
+            });
+
+            renderChecklist();
+        }
+
+        function updateSubsCount(val) {
+            const parsedValue = Number.parseInt(val, 10);
+            appState.currentSubs = Number.isFinite(parsedValue)
+                ? Math.min(10000, Math.max(0, parsedValue))
+                : 0;
+            document.getElementById('sub-input').value = appState.currentSubs;
+            saveState();
+        }
+
+        function saveNotes(val) {
+            appState.notes = val;
+            localStorage.setItem('music_launcher_v2', JSON.stringify(appState));
+        }
+
+        // DASHBOARD CALCULATIONS
+        function updateDashboard() {
+            // Task count
+            let totalTasksDone = 0;
+            let fullDaysDone = 0;
+            let releasedSongs = 0;
+
+            MASTER_40_DAY_PLAN.forEach(item => {
+                const t0 = appState.checkedTasks[`d${item.day}_t0`];
+                const t1 = appState.checkedTasks[`d${item.day}_t1`];
+                const t2 = appState.checkedTasks[`d${item.day}_t2`];
+                
+                const c = (t0 ? 1 : 0) + (t1 ? 1 : 0) + (t2 ? 1 : 0);
+                totalTasksDone += c;
+                if (c === 3) fullDaysDone++;
+                if (item.isRelease && item.song.startsWith('Song ') && c === 3) releasedSongs++;
+            });
+
+            // Update Task Counter UI
+            document.getElementById('tasks-completed-text').innerHTML = `${totalTasksDone} <span class="text-xs font-normal text-slate-400">/ 120 Tasks</span>`;
+            const tasksPct = Math.min(100, Math.round((totalTasksDone / 120) * 100));
+            document.getElementById('tasks-percentage').innerText = `${tasksPct}%`;
+            document.getElementById('tasks-progress-bar').style.width = `${tasksPct}%`;
+
+            // Update Days Counter UI
+            document.getElementById('days-completed-text').innerHTML = `${fullDaysDone} <span class="text-xs font-normal text-slate-400">/ 40 Days</span>`;
+            const daysPct = Math.min(100, Math.round((fullDaysDone / 40) * 100));
+            document.getElementById('days-percentage').innerText = `${daysPct}%`;
+            document.getElementById('days-progress-bar').style.width = `${daysPct}%`;
+
+            // Update Subscriber UI
+            const subs = appState.currentSubs || 0;
+            const subPct = Math.min(100, Math.round((subs / 1000) * 100));
+            document.getElementById('sub-percentage').innerText = `${subPct}%`;
+            document.getElementById('sub-progress-bar').style.width = `${subPct}%`;
+
+            // Update Song Pipeline
+            document.getElementById('songs-released-text').innerText = `${releasedSongs} / 5 Released`;
+            const nextRelease = MASTER_40_DAY_PLAN.find(item => {
+                if (!item.isRelease || !item.song.startsWith('Song ')) return false;
+                return ![0, 1, 2].every(taskIdx => appState.checkedTasks[`d${item.day}_t${taskIdx}`]);
+            });
+            document.getElementById('next-release-tag').innerText = nextRelease
+                ? `Day ${nextRelease.day} (${nextRelease.song})`
+                : 'All songs released';
+        }
+
+        // RESET MODAL LOGIC
+        function confirmReset() {
+            document.getElementById('reset-modal').classList.remove('hidden');
+        }
+
+        function closeResetModal() {
+            document.getElementById('reset-modal').classList.add('hidden');
+        }
+
+        function executeReset() {
+            localStorage.removeItem('music_launcher_v2');
+            appState = {
+                currentSubs: 0,
+                checkedTasks: {},
+                expandedDays: { 1: true },
+                notes: "",
+                activeFilter: 'all'
+            };
+            document.getElementById('sub-input').value = 0;
+            document.getElementById('studio-notes').value = "";
+            closeResetModal();
+            renderChecklist();
+            updateDashboard();
+        }
+
+        // BACKUP EXPORT
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `music_launchpad_progress_${new Date().toISOString().slice(0,10)}.json`);
+            dlAnchor.click();
+        }
+    </script>
+</body>
+</html>
